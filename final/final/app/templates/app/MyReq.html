@@ -1,0 +1,36 @@
+﻿{% extends "app/layout2.html" %}
+
+{% block content %}
+
+<table border="1">
+    <tr>
+        <th>Request ID</th>
+        <th>Address </th>
+        <th>Address 1</th>
+        <th>Address 2</th>
+        <th>City</th>
+        <th>State</th>
+        <th>Zip code</th>
+        <th>Owner Name</th>
+        <th>Owner Phone Number</th>
+        <th>Owner Email ID</th>
+        <th>Request Manager ID</th>
+    </tr>
+
+    {% for item in query_results %}
+    <tr> 
+        <td>{{ item.Req_ID }}</td>
+        <td>{{ item.Address }}</td>
+        <td>{{ item.Address1 }}</td>
+        <td>{{ item.Address2 }}</td>
+        <td>{{ item.City }}</td>
+        <td>{{ item.State }}</td>
+        <td>{{ item.Zipcode }}</td>
+        <td>{{ item.OwnerName }}</td>
+        <td>{{ item.OwnerPhoneNumber }}</td>
+        <td>{{ item.OwnerEmailID }}</td>
+        <td>{{ item.ReqMgr_EmailID }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

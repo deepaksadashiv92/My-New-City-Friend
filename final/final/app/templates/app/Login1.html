@@ -1,0 +1,15 @@
+﻿{% extends "app/layout1.html" %}
+
+{% block content %}
+<FORM method="post">
+{% csrf_token %}
+<table>
+{{ myForm.as_table }}
+</table>
+<p></p>
+<p> <input name="reserve" TYPE="submit" VALUE="Submit"
+class="btn btn‐default"</p>
+</FORM>
+<br />
+<br />
+{% endblock %}
