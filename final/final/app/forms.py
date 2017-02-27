@@ -1,7 +1,8 @@
 """
 Definition of forms.
 """
-
+#these forms are used to define the datatpe of the fields which is being used. It provides the constriction 
+#for the data types when the user is entering the values
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.utils.translation import ugettext_lazy as _
