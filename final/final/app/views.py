@@ -7,13 +7,18 @@ from django.http import HttpRequest
 from django.template import RequestContext
 from datetime import datetime
 from .forms import Register,Login,Complaint,Request,Assign,Close,Subscribe
+#importing forms
 from .models import Customer,Complaints,Requests,RequestMgr
+#importing models
 import hashlib 
 import sys
+# it is the function for log in page which is validating from the form used and saving the data and also encrypting the password.
+# the validation and the data objects used it taken from forms and models
 
 def reg(request):
     assert isinstance(request, HttpRequest)
     if(request.method=="POST"):
+        #post method
         f=Register(request.POST)
         if f.is_valid():
             Name=f.cleaned_data.get("Cust_Name")
@@ -25,11 +30,13 @@ def reg(request):
             Gender=f.cleaned_data.get("Cust_Gender")
             bPassword = Password.encode()
             e=hashlib.sha512()
+            #password encryption
             e.update(bPassword)
             encrypted=e.digest()
             print(encrypted)
             try:
                 print("Entered Try for Registration")
+                #validation of the form and saving it
                 c=Customer.objects.create(Cust_Name=Name,Cust_Password=encrypted,Cust_EmailID=EmailID,Cust_Address=Address,Cust_PhoneNumber=PhoneNumber,Cust_DOB=DOB,Cust_Gender=Gender,Cust_SubscriptionStatus="0")
                 c.save()
                 print(EmailID)
@@ -39,7 +46,8 @@ def reg(request):
                 return render(request,'app/Reg.html',{'myForm':f})
         else:
             print("Error while registering")
-            return render(request,'app/Reg.html')                   
+            return render(request,'app/Reg.html')    
+        #the get method used to get the login screen
     else:
         f=Register()
         return render(request,
@@ -58,7 +66,7 @@ def regsuccess1(request):
         request,
         'app/RegSuccess1.html'
         )
-
+# a subscription page where the validation is checked for the user who has logged in
 def subscribe(request):
     assert isinstance(request,HttpRequest)
     if request.method == 'POST':
@@ -84,6 +92,7 @@ def complaints(request):
             Complaint_Desc=f.cleaned_data.get('Complaint_Description')
             r1=Requests.objects.filter(Req_ID=ReqID)
             if r1 :
+                #getting the request data and saving it into the dataase
                 c=Complaints.objects.create(Complaint_ID="0",Cust_EmailID=EmailID,Req_ID=ReqID,Complaint_Description=Complaint_Desc)
                 c.save()
                 c.Complaint_ID=c.id
@@ -98,7 +107,7 @@ def complaints(request):
      else:
         f=Complaint()
         return render(request,'app/RaiseComplaints.html',{'myForm':f,'name':request.session['username'],'email':request.session['useremailid']})
-
+# a complain get method file
 def complaintsuccess(request):
     assert isinstance(request, HttpRequest)
     return render(
@@ -135,9 +144,11 @@ def login1(request):
                        print(r.Cust_Password)
                        print("Encrypted")
                        print(encrypted)
+                    #providing the expiry time for the login
                        request.session.set_expiry(1200)
                        request.session['username']=r.Cust_Name
                        request.session['useremailid']=r.Cust_EmailID
+                        #validation check
                        if(r.Cust_Password == encrypted):
                           return render(request,'app/Welcome.html',{'myForm':Complaint(),'name':request.session['username'],'email':request.session['useremailid']})  
                        else:
